@@ -11,18 +11,17 @@ class MurmurationsInterface extends React.Component {
     this.handleFilterSubmit = this.handleFilterSubmit.bind(this);
     this.state = {
       nodes: [],
-      filterFormData : {}
+      filterFormData : props.settings.formData
     };
+    console.log(props);
   }
 
   fetchNodes(filters){
-    var api_url = window.wpReactSettings.apiUrl;
+    var api_url = this.props.settings.apiUrl;
 
     console.log("Fetching nodes from "+api_url);
 
     this.setState({isLoaded : false});
-
-    //var filters = new URLSearchParams(filters);
 
     fetch(api_url+'?'+filters)
       .then(res => res.json())
@@ -50,9 +49,9 @@ class MurmurationsInterface extends React.Component {
 
     this.setState({filterFormData : formData});
 
-    Object.keys(formData).forEach(function(key,index) {
-      if('operator' in window.wpReactSettings.filterSchema.properties[key]){
-        var op = window.wpReactSettings.filterSchema.properties[key].operator;
+    Object.keys(formData).forEach((key,index) => {
+      if('operator' in this.props.settings.filterSchema.properties[key]){
+        var op = this.props.settings.filterSchema.properties[key].operator;
       }else{
         var op = 'equals';
       }
@@ -67,29 +66,13 @@ class MurmurationsInterface extends React.Component {
 
   componentDidMount() {
 
-    this.setState({filterFormData : window.wpReactSettings.formData});
+    this.fetchNodes();
 
-    fetch(window.wpReactSettings.apiUrl)
-      .then(res => res.json())
-      .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            nodes: result
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      )
   }
 
   render() {
 
-    const schema = window.wpReactSettings.filterSchema;
+    const schema = this.props.settings.filterSchema;
 
     const { error, isLoaded, nodes } = this.state;
 
@@ -114,12 +97,14 @@ class MurmurationsInterface extends React.Component {
 
       return (
         <div>
-          <Form schema={schema}
-          formData={this.state.filterFormData}
-          //onChange={log("changed")}
-          onSubmit={this.handleFilterSubmit}
-          //onSubmit={this.handleFilterSubmit}
-          onError={log("errors")} />
+          <div className="mri-filter-form">
+            <Form schema={schema}
+            formData={this.state.filterFormData}
+            //onChange={log("changed")}
+            onChange={this.handleFilterSubmit}
+            //onSubmit={this.handleFilterSubmit}
+            onError={log("errors")} />
+          </div>
           {interfaceComponent}
         </div>
       );

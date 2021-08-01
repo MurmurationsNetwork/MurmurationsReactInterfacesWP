@@ -16,9 +16,12 @@ require_once( MRI_INCLUDES . '/shortcodes.php' );
 add_action('wp_head', function (){
   ?>
   <script>
-  window.wpReactSettings = window.wpReactSettings || {};
-  window.wpReactSettings.filterSchema = {
-    title: "Filter",
+
+  var mriSettings = {}
+
+
+  mriSettings.filterSchema = {
+    title: "Filter Nodes",
     type: "object",
     properties: {
       community_types: {
@@ -53,13 +56,24 @@ add_action('wp_head', function (){
     }
   };
 
-  window.wpReactSettings.apiUrl = "http://localhost/projects/murmurations/wordpress-dev/wp-json/murmurations-aggregator/v1/get/nodes";
+  mriSettings.filterUiSchema = {};
 
-  window.wpReactSettings.schemaUrl = "http://localhost/projects/murmurations/wordpress-dev/wp-json/murmurations-aggregator/v1/get/nodes";
+  mriSettings.apiUrl = "http://localhost/projects/murmurations/wordpress-dev/wp-json/murmurations-aggregator/v1/get/nodes";
 
-  window.wpReactSettings.formData = {};
+  mriSettings.schemaUrl = "http://localhost/projects/murmurations/wordpress-dev/wp-json/murmurations-aggregator/v1/get/nodes";
 
-  window.wpReactSettings.listFields = ['name','url','description','country'];
+  mriSettings.formData = {};
+
+  mriSettings.listFields = ['name','url','description','country'];
+
+  mriSettings.mapCenter = [52, -97.1384];
+  mriSettings.mapZoom = 4;
+  mriSettings.mapAllowScrollZoom = true;
+
+  mriSettings.clientPathToApp = "http://localhost/TestPress4/wp-content/plugins/murmurations-react-interfaces/widget/";
+
+  window.wpReactSettings = window.wpReactSettings || {};
+  window.wpReactSettings = mriSettings;
 
   </script>
 

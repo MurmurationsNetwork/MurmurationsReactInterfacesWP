@@ -8,11 +8,11 @@ const reactDirectory = document.getElementById('murmurations-react-directory');
 const reactMap = document.getElementById('murmurations-react-map');
 
 if (reactDirectory) {
-  const settings = window.reactWidgetSettings;
+  const settings = window.wpReactSettings;
   ReactDOM.render(<MurmurationsInterface settings={settings} interfaceComp="directory"/>, reactDirectory);
 }
 
 if (reactMap) {
-  const settings = window.reactWidgetSettings;
+  const settings = window.wpReactSettings;
   ReactDOM.render(<MurmurationsInterface settings={settings} interfaceComp="map" />, reactMap);
 }
