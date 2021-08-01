@@ -4,21 +4,21 @@ import MapPopup from './MapPopup.js'
 
 import 'leaflet/dist/leaflet.css'
 
-/*
 delete L.Icon.Default.prototype._getIconUrl;
 
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: '/images/marker-icon-2x.png',
-  iconUrl: '/images/marker-icon.png',
-  shadowUrl: '/images/marker-shadow.png'
-});
-
-*/
+const Map = ({nodes, settings}) => {
 
 
-const Map = ({nodes}) => {
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: settings.clientPathToApp+'public/images/marker-icon-2x.png',
+    iconUrl: settings.clientPathToApp+'public/images/marker-icon.png',
+    shadowUrl: settings.clientPathToApp+'public/images/marker-shadow.png'
+  });
+
+  console.log(settings);
+
   return (
-    <MapContainer center={[51.505, -0.09]} zoom={2} scrollWheelZoom={false} style={{height: "70vh", width: "85%", margin: "auto"}}>
+    <MapContainer center={settings.mapCenter} zoom={settings.mapZoom} scrollWheelZoom={settings.mapAllowScrollZoom} style={{height: "70vh", width: "100%", margin: "auto"}}>
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
