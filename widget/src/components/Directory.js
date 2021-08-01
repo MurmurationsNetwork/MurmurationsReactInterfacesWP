@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactPaginate from 'react-paginate'
-import Node from './Node.jsx';
+import Node from './Node.js';
 
 class Directory extends React.Component {
 

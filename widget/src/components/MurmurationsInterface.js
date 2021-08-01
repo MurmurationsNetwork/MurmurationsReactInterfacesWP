@@ -28,7 +28,6 @@ class MurmurationsInterface extends React.Component {
       .then(res => res.json())
       .then(
         (result) => {
-          console.log("Result" + result);
           this.setState({
             isLoaded: true,
             nodes: result
@@ -61,8 +60,6 @@ class MurmurationsInterface extends React.Component {
       filters += "filters["+index+"][1]="+op+"&";
       filters += "filters["+index+"][2]="+formData[key]+"&";
     });
-
-    console.log(filters);
 
     this.fetchNodes(filters);
 
@@ -103,19 +100,27 @@ class MurmurationsInterface extends React.Component {
     } else if (!isLoaded) {
       return <div>Loading...</div>;
     } else {
-      log(schema)
-      log(nodes)
-      log(this.filterFormData)
+      //log(schema)
+      //log(nodes)
+      console.log("filterFormData in render()", this.state.filterFormData)
+
+      var interfaceComponent;
+
+      if (this.props.interfaceComp == 'directory' ){
+        interfaceComponent = <Directory nodes={nodes} settings={this.props.settings} />
+      } else if (this.props.interfaceComp == 'map' ){
+        interfaceComponent = <Map nodes={nodes} settings={this.props.settings} />
+      }
+
       return (
         <div>
           <Form schema={schema}
-          formData={this.filterFormData}
+          formData={this.state.filterFormData}
           //onChange={log("changed")}
           onSubmit={this.handleFilterSubmit}
           //onSubmit={this.handleFilterSubmit}
           onError={log("errors")} />
-          <Directory nodes={nodes} />
-
+          {interfaceComponent}
         </div>
       );
     }
