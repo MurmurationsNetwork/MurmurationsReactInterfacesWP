@@ -8,14 +8,11 @@ delete L.Icon.Default.prototype._getIconUrl;
 
 const Map = ({nodes, settings}) => {
 
-
   L.Icon.Default.mergeOptions({
     iconRetinaUrl: settings.clientPathToApp+'public/images/marker-icon-2x.png',
     iconUrl: settings.clientPathToApp+'public/images/marker-icon.png',
     shadowUrl: settings.clientPathToApp+'public/images/marker-shadow.png'
   });
-
-  console.log(settings);
 
   return (
     <MapContainer center={settings.mapCenter} zoom={settings.mapZoom} scrollWheelZoom={settings.mapAllowScrollZoom} style={{height: "70vh", width: "100%", margin: "auto"}}>

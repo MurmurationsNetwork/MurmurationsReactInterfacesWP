@@ -13,13 +13,11 @@ class MurmurationsInterface extends React.Component {
       nodes: [],
       filterFormData : props.settings.formData
     };
-    console.log(props);
+    
   }
 
   fetchNodes(filters){
     var api_url = this.props.settings.apiUrl;
-
-    console.log("Fetching nodes from "+api_url);
 
     this.setState({isLoaded : false});
 
@@ -76,16 +74,11 @@ class MurmurationsInterface extends React.Component {
 
     const { error, isLoaded, nodes } = this.state;
 
-    const log = (type) => console.log.bind(console, type);
-
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
       return <div>Loading...</div>;
     } else {
-      //log(schema)
-      //log(nodes)
-      console.log("filterFormData in render()", this.state.filterFormData)
 
       var interfaceComponent;
 
@@ -100,10 +93,8 @@ class MurmurationsInterface extends React.Component {
           <div className="mri-filter-form">
             <Form schema={schema}
             formData={this.state.filterFormData}
-            //onChange={log("changed")}
             onChange={this.handleFilterSubmit}
-            //onSubmit={this.handleFilterSubmit}
-            onError={log("errors")} />
+            onError={console.log("errors", this)} />
           </div>
           {interfaceComponent}
         </div>

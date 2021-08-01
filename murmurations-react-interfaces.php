@@ -44,17 +44,44 @@ add_action('wp_head', function (){
         title: "Community setting",
         operator : "includes"
       },
-      country: {
+      project_status: {
         type: "string",
         enum: [
-          "Canada",
-          "United States"
+          "Established",
+          "Forming"
         ],
-        title: "Country",
+        title: "Project Status",
         operator : "equals"
       }
     }
   };
+
+  mriSettings.directoryDisplaySchema = {
+    name : {
+      showLabel : false,
+      link : "gen_project_url"
+    },
+    url : {
+      showLabel : false,
+      link : "url"
+    },
+    description : {
+      showLabel : false,
+      truncate : 250
+    },
+    gen_community_setting : {
+      showLabel : true,
+      label : "Setting"
+    },
+    community_types : {
+      showLabel : true,
+      label : "Community Types"
+    },
+    languages_spoken : {
+      showLabel : true,
+      label : "Languages Spoken"
+    }
+  }
 
   mriSettings.filterUiSchema = {};
 
@@ -63,8 +90,6 @@ add_action('wp_head', function (){
   mriSettings.schemaUrl = "http://localhost/projects/murmurations/wordpress-dev/wp-json/murmurations-aggregator/v1/get/nodes";
 
   mriSettings.formData = {};
-
-  mriSettings.listFields = ['name','url','description','country'];
 
   mriSettings.mapCenter = [52, -97.1384];
   mriSettings.mapZoom = 4;

@@ -12,7 +12,7 @@ class Directory extends React.Component {
     };
   }
 
-  nodesPerPage = this.props.nodesPerPage || 3
+  nodesPerPage = this.props.settings.nodesPerPage || 15
 
   handlePageClick = data => {
     this.setState({
@@ -26,21 +26,7 @@ class Directory extends React.Component {
     const end = start+this.nodesPerPage;
     return this.props.nodes.slice(start,end);
   }
-/*
-  splitIntoPages = nodes => {
-    return nodes.reduce((resultArray, node, index) => {
-      const pageIndex = Math.floor(index / this.nodesPerPage)
 
-      if (!resultArray[pageIndex]) {
-        resultArray[pageIndex] = []
-      }
-
-      resultArray[pageIndex].push(node)
-
-      return resultArray
-    }, [])
-  }
-*/
   render() {
 
     const nodes = this.props.nodes;
@@ -51,7 +37,7 @@ class Directory extends React.Component {
       <div>
         <div className="nodeList">
           <div className="node-count">{nodes.length} results found</div>
-          {pageNodes.map((node) =>  <Node nodeData={node} />)}
+          {pageNodes.map((node) =>  <Node nodeData={node} settings={this.props.settings}/>)}
         </div>
         <div className="react-paginate">
           <ReactPaginate
@@ -61,7 +47,7 @@ class Directory extends React.Component {
             breakClassName={'break-me'}
             pageCount={nodes.length/this.nodesPerPage}
             marginPagesDisplayed={2}
-            pageRangeDisplayed={3}
+            pageRangeDisplayed={this.nodesPerPage}
             onPageChange={this.handlePageClick}
             containerClassName={'pagination'}
             subContainerClassName={'pages pagination'}
