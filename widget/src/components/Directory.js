@@ -7,18 +7,26 @@ class Directory extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activePage : 1
+      activePage : 0,
+      pageNodes: this.getPageNodes(0)
     };
   }
 
-  nodesPerPage = 10
+  nodesPerPage = this.props.nodesPerPage || 3
 
   handlePageClick = data => {
     this.setState({
-      activePage: data.selected
+      activePage: data.selected,
+      pageNodes: this.getPageNodes(data.selected)
     });
   }
 
+  getPageNodes = page => {
+    const start = page*this.nodesPerPage;
+    const end = start+this.nodesPerPage;
+    return this.props.nodes.slice(start,end);
+  }
+/*
   splitIntoPages = nodes => {
     return nodes.reduce((resultArray, node, index) => {
       const pageIndex = Math.floor(index / this.nodesPerPage)
@@ -32,30 +40,35 @@ class Directory extends React.Component {
       return resultArray
     }, [])
   }
-
+*/
   render() {
 
     const nodes = this.props.nodes;
+
+    const pageNodes = this.state.pageNodes;
 
     return (
       <div>
         <div className="nodeList">
           <div className="node-count">{nodes.length} results found</div>
-          {nodes.map((node) =>  <Node nodeData={node} />)}
+          {pageNodes.map((node) =>  <Node nodeData={node} />)}
         </div>
-        <ReactPaginate
-          previousLabel={'prev'}
-          nextLabel={'next'}
-          breakLabel={'...'}
-          breakClassName={'break-me'}
-          pageCount={nodes.length}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={this.handlePageClick}
-          containerClassName={'pagination'}
-          subContainerClassName={'pages pagination'}
-          activeClassName={'active'}
-        />
+        <div className="react-paginate">
+          <ReactPaginate
+            previousLabel={'prev'}
+            nextLabel={'next'}
+            breakLabel={'...'}
+            breakClassName={'break-me'}
+            pageCount={nodes.length/this.nodesPerPage}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={3}
+            onPageChange={this.handlePageClick}
+            containerClassName={'pagination'}
+            subContainerClassName={'pages pagination'}
+            pageClassName={'page-link-li'}
+            activeClassName={'active'}
+          />
+        </div>
       </div>
     );
 
