@@ -20,7 +20,7 @@ add_action('wp_head', function (){
     "mapCenter" => [52, -97.1384],
     "mapZoom" => 4,
     "mapAllowScrollZoom" => 'true',
-    "clientPathToApp" => plugin_dir_path( __FILE__ ) . 'widget/',
+    "clientPathToApp" => plugin_dir_url( __FILE__ ) . 'widget/',
     "filterSchema" => json_decode(
       file_get_contents(
         plugin_dir_path( __FILE__ ) . "config/default_filter_schema.json"
