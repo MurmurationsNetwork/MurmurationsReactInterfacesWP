@@ -1,0 +1,35 @@
+{
+  "title": "Filter Nodes",
+  "type": "object",
+  "properties": {
+    "community_types": {
+      "type": "string",
+      "enum": [
+        "Eco Project",
+        "Ecovillage",
+        "Other, not specified"
+      ],
+      "title": "Community type",
+      "operator" : "includes"
+    },
+    "gen_community_setting" : {
+      "type": "string",
+      "enum": [
+        "Rural",
+        "Urban",
+        "Other"
+      ],
+      "title": "Community setting",
+      "operator" : "includes"
+    },
+    "project_status": {
+      "type": "string",
+      "enum": [
+        "Established",
+        "Forming"
+      ],
+      "title": "Project Status",
+      "operator" : "equals"
+    }
+  }
+}

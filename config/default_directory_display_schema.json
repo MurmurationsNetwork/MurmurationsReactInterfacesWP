@@ -1,0 +1,26 @@
+{
+  "name" : {
+    "showLabel" : false,
+    "link" : "gen_project_url"
+  },
+  "url" : {
+    "showLabel" : false,
+    "link" : "url"
+  },
+  "description" : {
+    "showLabel" : false,
+    "truncate" : 250
+  },
+  "gen_community_setting" : {
+    "showLabel" : true,
+    "label" : "Setting"
+  },
+  "community_types" : {
+    "showLabel" : true,
+    "label" : "Community Types"
+  },
+  "languages_spoken" : {
+    "showLabel" : true,
+    "label" : "Languages Spoken"
+  }
+}

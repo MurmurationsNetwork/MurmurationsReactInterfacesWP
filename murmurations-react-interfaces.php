@@ -14,13 +14,37 @@ require_once( MRI_INCLUDES . '/enqueue.php' );
 require_once( MRI_INCLUDES . '/shortcodes.php' );
 
 add_action('wp_head', function (){
+
+  $defaults = array(
+    "apiUrl" => get_rest_url( null, "murmurations-aggregator/v1/get/nodes" ),
+    "mapCenter" => [52, -97.1384],
+    "mapZoom" => 4,
+    "mapAllowScrollZoom" => 'true',
+    "clientPathToApp" => plugin_dir_path( __FILE__ ) . 'widget/',
+    "filterSchema" => json_decode(
+      file_get_contents(
+        plugin_dir_path( __FILE__ ) . "config/default_filter_schema.json"
+      ),
+      true
+    ),
+    "directoryDisplaySchema" => json_decode( file_get_contents( plugin_dir_path( __FILE__ ) . "config/default_directory_display_schema.json") ) , true
+  );
+
+  if( is_callable( array( "Murmurations\Aggregator\Settings", "get" ) ) ){
+    $agg_settings = Murmurations\Aggregator\Settings::get();
+    $settings = wp_parse_args( $agg_settings, $defaults );
+  }else{
+    $settings = $defaults;
+  }
+
   ?>
   <script>
 
   var mriSettings = {}
 
-
-  mriSettings.filterSchema = {
+  mriSettings.filterSchema = <?php echo json_encode( $settings['filterSchema'] ) ?>
+/*
+  {
     title: "Filter Nodes",
     type: "object",
     properties: {
@@ -55,8 +79,11 @@ add_action('wp_head', function (){
       }
     }
   };
+  */
 
-  mriSettings.directoryDisplaySchema = {
+  mriSettings.directoryDisplaySchema = <?php echo json_encode( $settings['directoryDisplaySchema'] ) ?>
+/*
+  {
     name : {
       showLabel : false,
       link : "gen_project_url"
@@ -83,19 +110,21 @@ add_action('wp_head', function (){
     }
   }
 
+  */
+
   mriSettings.filterUiSchema = {};
 
-  mriSettings.apiUrl = "http://localhost/projects/murmurations/wordpress-dev/wp-json/murmurations-aggregator/v1/get/nodes";
+  mriSettings.apiUrl = "<?php echo $settings['apiUrl']; ?>";
 
-  mriSettings.schemaUrl = "http://localhost/projects/murmurations/wordpress-dev/wp-json/murmurations-aggregator/v1/get/nodes";
+  mriSettings.schemaUrl = "";
 
   mriSettings.formData = {};
 
-  mriSettings.mapCenter = [52, -97.1384];
-  mriSettings.mapZoom = 4;
-  mriSettings.mapAllowScrollZoom = true;
+  mriSettings.mapCenter = [<?php echo join(', ', $settings['mapCenter']); ?>];
+  mriSettings.mapZoom = <?php echo $settings['mapZoom']; ?>;
+  mriSettings.mapAllowScrollZoom = <?php echo $settings['mapAllowScrollZoom']; ?>;
 
-  mriSettings.clientPathToApp = "http://localhost/TestPress4/wp-content/plugins/murmurations-react-interfaces/widget/";
+  mriSettings.clientPathToApp = "<?php echo $settings['clientPathToApp']; ?>";
 
   window.wpReactSettings = window.wpReactSettings || {};
   window.wpReactSettings = mriSettings;
