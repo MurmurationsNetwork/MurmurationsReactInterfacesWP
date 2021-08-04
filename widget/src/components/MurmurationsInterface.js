@@ -13,7 +13,7 @@ class MurmurationsInterface extends React.Component {
       nodes: [],
       filterFormData : props.settings.formData
     };
-    
+
   }
 
   fetchNodes(filters){
@@ -48,14 +48,18 @@ class MurmurationsInterface extends React.Component {
     this.setState({filterFormData : formData});
 
     Object.keys(formData).forEach((key,index) => {
-      if('operator' in this.props.settings.filterSchema.properties[key]){
-        var op = this.props.settings.filterSchema.properties[key].operator;
-      }else{
-        var op = 'equals';
+      if(formData[key]){
+        if (formData[key] != "any" && formData[key] != ""){
+          if('operator' in this.props.settings.filterSchema.properties[key]){
+            var op = this.props.settings.filterSchema.properties[key].operator;
+          }else{
+            var op = 'equals';
+          }
+          filters += "filters["+index+"][0]="+key+'&';
+          filters += "filters["+index+"][1]="+op+"&";
+          filters += "filters["+index+"][2]="+formData[key]+"&";
+        }
       }
-      filters += "filters["+index+"][0]="+key+'&';
-      filters += "filters["+index+"][1]="+op+"&";
-      filters += "filters["+index+"][2]="+formData[key]+"&";
     });
 
     this.fetchNodes(filters);
@@ -74,19 +78,20 @@ class MurmurationsInterface extends React.Component {
 
     const { error, isLoaded, nodes } = this.state;
 
+
+    var interfaceComponent;
+
     if (error) {
-      return <div>Error: {error.message}</div>;
+      interfaceComponent = <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
-      return <div>Loading...</div>;
+      interfaceComponent = <div>Loading...</div>;
     } else {
-
-      var interfaceComponent;
-
       if (this.props.interfaceComp == 'directory' ){
         interfaceComponent = <Directory nodes={nodes} settings={this.props.settings} />
       } else if (this.props.interfaceComp == 'map' ){
         interfaceComponent = <Map nodes={nodes} settings={this.props.settings} />
       }
+    }
 
       return (
         <div>
@@ -99,7 +104,7 @@ class MurmurationsInterface extends React.Component {
           {interfaceComponent}
         </div>
       );
-    }
+
   }
 }
 
