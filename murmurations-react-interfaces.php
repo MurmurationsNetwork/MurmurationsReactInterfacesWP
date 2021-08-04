@@ -21,6 +21,7 @@ add_action('wp_head', function (){
     "mapZoom" => 4,
     "mapAllowScrollZoom" => 'true',
     "clientPathToApp" => plugin_dir_url( __FILE__ ) . 'widget/',
+    "filter_fields" => array("country"),
     "filterSchema" => json_decode(
       file_get_contents(
         plugin_dir_path( __FILE__ ) . "config/default_filter_schema.json"
@@ -33,6 +34,10 @@ add_action('wp_head', function (){
   if( is_callable( array( "Murmurations\Aggregator\Settings", "get" ) ) ){
     $agg_settings = Murmurations\Aggregator\Settings::get();
     $settings = wp_parse_args( $agg_settings, $defaults );
+    $data_schema = Murmurations\Aggregator\Schema::get();
+
+    $settings['filterSchema']['properties'] = generate_filter_schema_fields($settings['filter_fields'],$data_schema);
+
   }else{
     $settings = $defaults;
   }
@@ -133,3 +138,48 @@ add_action('wp_head', function (){
 
   <?php
 });
+
+/**
+* Take an array of fields and a JSON Schema and generate the filter JSON Schema, using the enum values and titles from the schema.
+*/
+
+function generate_filter_schema_fields( $filter_fields, $data_schema ){
+  $filter_schema_fields = array();
+  foreach ( $filter_fields as $field ) {
+    if( isset($data_schema['properties'][$field]) ){
+      $schema_field = $data_schema['properties'][$field];
+      $filter_schema_fields[$field] = array(
+        "title" => $schema_field['title'],
+        "type" => $schema_field['type'] == "boolean" ? "boolean" : "string",
+        "operator" => "includes"
+      );
+
+      $enum_data = get_field_enums( $schema_field );
+
+      if ( $enum_data ){
+        $filter_schema_fields[$field]['enum'] = $enum_data[0];
+        $filter_schema_fields[$field]['enumNames'] = $enum_data[1];
+      }
+
+    }
+
+  }
+  return $filter_schema_fields;
+}
+
+function get_field_enums($field){
+  $enum = false;
+  $enumNames = false;
+  if( isset( $field['enum'] ) ){
+    $enum = $field['enum'];
+    $enumNames = isset( $field['enumNames'] ) ? $field['enumNames'] : false;
+  } else if( $field['type'] === 'array' && $field['items']['enum'] ){
+    $enum = $field['items']['enum'];
+    $enumNames = isset( $field['items']['enumNames'] ) ? $field['items']['enumNames'] : false;
+  }
+  if( $enum ){
+    return array( $enum, $enumNames );
+  }else{
+    return false;
+  }
+}
