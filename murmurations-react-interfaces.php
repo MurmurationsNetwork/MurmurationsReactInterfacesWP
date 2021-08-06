@@ -16,19 +16,19 @@ require_once( MRI_INCLUDES . '/shortcodes.php' );
 add_action('wp_head', function (){
 
   $defaults = array(
-    "apiUrl" => get_rest_url( null, "murmurations-aggregator/v1/get/nodes" ),
-    "mapCenter" => [52, -97.1384],
-    "mapZoom" => 4,
-    "mapAllowScrollZoom" => 'true',
-    "clientPathToApp" => plugin_dir_url( __FILE__ ) . 'widget/',
+    "api_url" => get_rest_url( null, "murmurations-aggregator/v1/get/nodes" ),
+    "map_origin" => "52, -97.1384",
+    "map_scale" => 4,
+    "map_allow_scroll_zoom" => 'true',
+    "client_path_to_app" => plugin_dir_url( __FILE__ ) . 'widget/',
     "filter_fields" => array("country"),
-    "filterSchema" => json_decode(
+    "filter_schema" => json_decode(
       file_get_contents(
         plugin_dir_path( __FILE__ ) . "config/default_filter_schema.json"
       ),
       true
     ),
-    "directoryDisplaySchema" => json_decode( file_get_contents( plugin_dir_path( __FILE__ ) . "config/default_directory_display_schema.json") ) , true
+    "directory_display_schema" => json_decode( file_get_contents( plugin_dir_path( __FILE__ ) . "config/default_directory_display_schema.json") ) , true
   );
 
   if( is_callable( array( "Murmurations\Aggregator\Settings", "get" ) ) ){
@@ -36,102 +36,31 @@ add_action('wp_head', function (){
     $settings = wp_parse_args( $agg_settings, $defaults );
     $data_schema = Murmurations\Aggregator\Schema::get();
 
-    $settings['filterSchema']['properties'] = generate_filter_schema_fields($settings['filter_fields'],$data_schema);
+    $settings['filter_schema']['properties'] = generate_filter_schema_fields($settings['filter_fields'],$data_schema);
 
   }else{
     $settings = $defaults;
   }
+
+  $settings = apply_filters( 'murmurations-interfaces-settings', $settings );
+
 
   ?>
   <script>
 
   var mriSettings = {}
 
-  mriSettings.filterSchema = <?php echo json_encode( $settings['filterSchema'] ) ?>
-/*
-  {
-    title: "Filter Nodes",
-    type: "object",
-    properties: {
-      community_types: {
-        type: "string",
-        enum: [
-          "Eco Project",
-          "Ecovillage",
-          "Other, not specified"
-        ],
-        title: "Community type",
-        operator : "includes"
-      },
-      gen_community_setting : {
-        type: "string",
-        enum: [
-          "Rural",
-          "Urban",
-          "Other"
-        ],
-        title: "Community setting",
-        operator : "includes"
-      },
-      project_status: {
-        type: "string",
-        enum: [
-          "Established",
-          "Forming"
-        ],
-        title: "Project Status",
-        operator : "equals"
-      }
-    }
-  };
-  */
-
-  mriSettings.directoryDisplaySchema = <?php echo json_encode( $settings['directoryDisplaySchema'] ) ?>
-/*
-  {
-    name : {
-      showLabel : false,
-      link : "gen_project_url"
-    },
-    url : {
-      showLabel : false,
-      link : "url"
-    },
-    description : {
-      showLabel : false,
-      truncate : 250
-    },
-    gen_community_setting : {
-      showLabel : true,
-      label : "Setting"
-    },
-    community_types : {
-      showLabel : true,
-      label : "Community Types"
-    },
-    languages_spoken : {
-      showLabel : true,
-      label : "Languages Spoken"
-    }
-  }
-
-  */
-
+  mriSettings.filterSchema = <?php  echo json_encode( $settings['filter_schema'] ) ?>;
+  mriSettings.directoryDisplaySchema = <?php echo json_encode( $settings['directory_display_schema'] ) ?>;
   mriSettings.filterUiSchema = {};
-
-  mriSettings.apiUrl = "<?php echo $settings['apiUrl']; ?>";
-
+  mriSettings.apiUrl = "<?php echo $settings['api_url']; ?>";
   mriSettings.schemaUrl = "";
-
   mriSettings.formData = {};
+  mriSettings.mapCenter = [<?php echo $settings['map_origin']; ?>];
+  mriSettings.mapZoom = <?php echo $settings['map_scale']; ?>;
+  mriSettings.mapAllowScrollZoom = <?php echo $settings['map_allow_scroll_zoom']; ?>;
+  mriSettings.clientPathToApp = "<?php echo $settings['client_path_to_app']; ?>";
 
-  mriSettings.mapCenter = [<?php echo join(', ', $settings['mapCenter']); ?>];
-  mriSettings.mapZoom = <?php echo $settings['mapZoom']; ?>;
-  mriSettings.mapAllowScrollZoom = <?php echo $settings['mapAllowScrollZoom']; ?>;
-
-  mriSettings.clientPathToApp = "<?php echo $settings['clientPathToApp']; ?>";
-
-  window.wpReactSettings = window.wpReactSettings || {};
   window.wpReactSettings = mriSettings;
 
   </script>
@@ -162,6 +91,21 @@ function generate_filter_schema_fields( $filter_fields, $data_schema ){
       }
 
     }
+
+    /*
+    if(isset($filter_schema_fields[$field]['enum'])){
+      if ($filter_schema_fields[$field]['enum'][0] != 'any'){
+        $enums = $filter_schema_fields[$field]['enum'];
+        array_unshift( $enums, array('any') );
+        $filter_schema_fields[$field]['enum'] = $enums;
+        if(isset($filter_schema_fields[$field]['enumNames'])){
+          $enumNames = $filter_schema_fields[$field]['enumNames'];
+          array_unshift( $enumNames, array('Any') );
+          $filter_schema_fields[$field]['enumNames'] = $enumNames;
+        }
+      }
+    }
+    */
 
   }
   return $filter_schema_fields;
