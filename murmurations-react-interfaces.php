@@ -20,6 +20,7 @@ add_action('wp_head', function (){
     "map_origin" => "52, -97.1384",
     "map_scale" => 4,
     "map_allow_scroll_zoom" => 'true',
+    "nodes_per_page" => 10,
     "client_path_to_app" => plugin_dir_url( __FILE__ ) . 'widget/',
     "filter_fields" => array("country"),
     "filter_schema" => json_decode(
@@ -60,6 +61,7 @@ add_action('wp_head', function (){
   mriSettings.mapZoom = <?php echo $settings['map_scale']; ?>;
   mriSettings.mapAllowScrollZoom = <?php echo $settings['map_allow_scroll_zoom']; ?>;
   mriSettings.clientPathToApp = "<?php echo $settings['client_path_to_app']; ?>";
+  mriSettings.nodesPerPage = "<?php echo $settings['nodes_per_page']; ?>";
 
   window.wpReactSettings = mriSettings;
 
