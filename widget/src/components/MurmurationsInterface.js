@@ -18,10 +18,11 @@ class MurmurationsInterface extends React.Component {
 
   fetchNodes(filters){
     var api_url = this.props.settings.apiUrl;
+    var api_node_format = this.props.settings.apiNodeFormat;
 
     this.setState({isLoaded : false});
 
-    fetch(api_url+'?'+filters)
+    fetch(api_url+'?'+filters+'&format='+api_node_format)
       .then(res => res.json())
       .then(
         (result) => {

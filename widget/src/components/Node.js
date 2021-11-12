@@ -9,12 +9,14 @@ class Node extends React.Component {
 
   render() {
 
-    var fields = [];
+    var node_content = [];
 
-    if(this.props.settings.directoryDisplaySchema){
+    if(this.props.settings.apiNodeFormat == 'HTML'){
+      node_content = <div dangerouslySetInnerHTML={{ __html: this.props.nodeData }} />
+    }else if(this.props.settings.directoryDisplaySchema){
       for (var field in this.props.settings.directoryDisplaySchema) {
         if (this.props.settings.directoryDisplaySchema.hasOwnProperty(field)) {
-          fields.push(
+          node_content.push(
             <NodeField
             field={field}
             value={this.props.nodeData[field]}
@@ -29,7 +31,7 @@ class Node extends React.Component {
 
     return(
       <div className={"directory-node"}>
-      {fields}
+      {node_content}
       </div>
     );
   }

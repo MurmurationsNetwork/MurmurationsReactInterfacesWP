@@ -21,6 +21,7 @@ add_action('wp_head', function (){
     "map_scale" => 4,
     "map_allow_scroll_zoom" => 'true',
     "nodes_per_page" => 10,
+    "api_node_format" => "JSON",
     "client_path_to_app" => plugin_dir_url( __FILE__ ) . 'widget/',
     "filter_fields" => array("country"),
     "filter_schema" => json_decode(
@@ -55,6 +56,7 @@ add_action('wp_head', function (){
   mriSettings.directoryDisplaySchema = <?php echo json_encode( $settings['directory_display_schema'] ) ?>;
   mriSettings.filterUiSchema = {};
   mriSettings.apiUrl = "<?php echo $settings['api_url']; ?>";
+  mriSettings.apiNodeFormat = "<?php echo $settings['api_node_format']; ?>";
   mriSettings.schemaUrl = "";
   mriSettings.formData = {};
   mriSettings.mapCenter = [<?php echo $settings['map_origin']; ?>];
