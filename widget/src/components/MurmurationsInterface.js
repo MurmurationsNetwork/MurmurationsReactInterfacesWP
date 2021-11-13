@@ -9,6 +9,8 @@ class MurmurationsInterface extends React.Component {
     super(props);
     this.fetchNodes = this.fetchNodes.bind(this);
     this.handleFilterSubmit = this.handleFilterSubmit.bind(this);
+    this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
+    this.handleSearchChange = this.handleSearchChange.bind(this);
     this.state = {
       nodes: [],
       filterFormData : props.settings.formData
@@ -22,7 +24,15 @@ class MurmurationsInterface extends React.Component {
 
     this.setState({isLoaded : false});
 
-    fetch(api_url+'?'+filters+'&format='+api_node_format)
+    var params = new URLSearchParams(filters);
+
+    params.set('format', api_node_format);
+
+    if(this.state.search){
+      params.set('search', this.state.search);
+    }
+
+    fetch(api_url+'?'+params.toString())
       .then(res => res.json())
       .then(
         (result) => {
@@ -40,6 +50,15 @@ class MurmurationsInterface extends React.Component {
       )
 
 
+  }
+
+  handleSearchChange(event) {
+    this.setState({search : event.target.value});
+  }
+
+  handleSearchSubmit(event) {
+    event.preventDefault();
+    this.fetchNodes();
   }
 
   handleFilterSubmit({formData}, e) {
@@ -79,7 +98,6 @@ class MurmurationsInterface extends React.Component {
 
     const { error, isLoaded, nodes } = this.state;
 
-
     var interfaceComponent;
 
     if (error) {
@@ -101,6 +119,12 @@ class MurmurationsInterface extends React.Component {
             formData={this.state.filterFormData}
             onChange={this.handleFilterSubmit}
             onError={console.log("errors", this)} />
+          </div>
+          <div className="mri-search-form">
+            <form action="/" onSubmit={this.handleSearchSubmit} >
+              <input type="text" name="search"  onChange={this.handleSearchChange} value={this.state.search} />
+              <button type="submit">Search</button>
+            </form>
           </div>
           {interfaceComponent}
         </div>
