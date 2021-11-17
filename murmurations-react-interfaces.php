@@ -44,7 +44,7 @@ add_action('wp_head', function (){
     $settings = $defaults;
   }
 
-  $settings = apply_filters( 'murmurations-interfaces-settings', $settings );
+  $settings = apply_filters( 'murmurations_interfaces_settings', $settings );
 
 
   ?>
@@ -95,21 +95,6 @@ function generate_filter_schema_fields( $filter_fields, $data_schema ){
       }
 
     }
-
-    /*
-    if(isset($filter_schema_fields[$field]['enum'])){
-      if ($filter_schema_fields[$field]['enum'][0] != 'any'){
-        $enums = $filter_schema_fields[$field]['enum'];
-        array_unshift( $enums, array('any') );
-        $filter_schema_fields[$field]['enum'] = $enums;
-        if(isset($filter_schema_fields[$field]['enumNames'])){
-          $enumNames = $filter_schema_fields[$field]['enumNames'];
-          array_unshift( $enumNames, array('Any') );
-          $filter_schema_fields[$field]['enumNames'] = $enumNames;
-        }
-      }
-    }
-    */
 
   }
   return $filter_schema_fields;
