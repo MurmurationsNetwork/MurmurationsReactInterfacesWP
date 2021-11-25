@@ -26,7 +26,9 @@ class MurmurationsInterface extends React.Component {
 
     var params = new URLSearchParams(filters);
 
-    params.set('format', api_node_format);
+    if( this.props.interfaceComp == 'directory' ){
+      params.set('format', api_node_format);
+    }
 
     if(this.state.search){
       params.set('search', this.state.search);
