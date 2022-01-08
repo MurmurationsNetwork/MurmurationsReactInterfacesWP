@@ -23,7 +23,7 @@ class Directory extends React.Component {
 
   getPageNodes = page => {
     const start = page*this.nodesPerPage;
-    const end = start+this.nodesPerPage;
+    const end = parseInt(start)+parseInt(this.nodesPerPage);
     return this.props.nodes.slice(start,end);
   }
 
