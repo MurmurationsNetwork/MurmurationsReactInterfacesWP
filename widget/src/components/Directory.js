@@ -7,8 +7,7 @@ class Directory extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activePage : 0,
-      pageNodes: this.getPageNodes(0)
+      activePage : 0
     };
   }
 
@@ -17,12 +16,12 @@ class Directory extends React.Component {
   handlePageClick = data => {
     this.setState({
       activePage: data.selected,
-      pageNodes: this.getPageNodes(data.selected)
+      pageNodes: this.getPageNodes()
     });
   }
 
-  getPageNodes = page => {
-    const start = page*this.nodesPerPage;
+  getPageNodes = () => {
+    const start = parseInt(this.state.activePage)*this.nodesPerPage;
     const end = parseInt(start)+parseInt(this.nodesPerPage);
     return this.props.nodes.slice(start,end);
   }
@@ -31,14 +30,22 @@ class Directory extends React.Component {
 
     const nodes = this.props.nodes;
 
-    const pageNodes = this.state.pageNodes;
+    const pageNodes = this.getPageNodes();
+
+    var loadingDiv;
+
+    if(!this.props.loaded){
+      loadingDiv = <div class="mri-directory-loading"><img src={this.props.settings.clientPathToApp + "public/images/spinner.gif"} /></div>
+    }
+
 
     return (
       <div>
+      {this.props.loaded ?
         <div className="nodeList">
           <div className="node-count">{nodes.length} results found</div>
           {pageNodes.map((node) =>  <Node nodeData={node} settings={this.props.settings}/>)}
-        </div>
+        </div> : loadingDiv }
         <div className="react-paginate">
           <ReactPaginate
             previousLabel={'prev'}

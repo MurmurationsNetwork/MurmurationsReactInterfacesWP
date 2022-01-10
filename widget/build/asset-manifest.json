@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/wp-content/plugins/murmurations-react-interfaces/widget/build/static/css/main.c22dce49.chunk.css",
-    "main.js": "/wp-content/plugins/murmurations-react-interfaces/widget/build/static/js/main.0773a0d8.chunk.js",
-    "main.js.map": "/wp-content/plugins/murmurations-react-interfaces/widget/build/static/js/main.0773a0d8.chunk.js.map",
+    "main.css": "/wp-content/plugins/murmurations-react-interfaces/widget/build/static/css/main.e34f5c05.chunk.css",
+    "main.js": "/wp-content/plugins/murmurations-react-interfaces/widget/build/static/js/main.5c5c95c3.chunk.js",
+    "main.js.map": "/wp-content/plugins/murmurations-react-interfaces/widget/build/static/js/main.5c5c95c3.chunk.js.map",
     "runtime-main.js": "/wp-content/plugins/murmurations-react-interfaces/widget/build/static/js/runtime-main.772099f3.js",
     "runtime-main.js.map": "/wp-content/plugins/murmurations-react-interfaces/widget/build/static/js/runtime-main.772099f3.js.map",
     "static/css/2.c1e28d34.chunk.css": "/wp-content/plugins/murmurations-react-interfaces/widget/build/static/css/2.c1e28d34.chunk.css",
@@ -10,14 +10,14 @@
     "static/js/2.10399c23.chunk.js.map": "/wp-content/plugins/murmurations-react-interfaces/widget/build/static/js/2.10399c23.chunk.js.map",
     "index.html": "/wp-content/plugins/murmurations-react-interfaces/widget/build/index.html",
     "static/css/2.c1e28d34.chunk.css.map": "/wp-content/plugins/murmurations-react-interfaces/widget/build/static/css/2.c1e28d34.chunk.css.map",
-    "static/css/main.c22dce49.chunk.css.map": "/wp-content/plugins/murmurations-react-interfaces/widget/build/static/css/main.c22dce49.chunk.css.map",
+    "static/css/main.e34f5c05.chunk.css.map": "/wp-content/plugins/murmurations-react-interfaces/widget/build/static/css/main.e34f5c05.chunk.css.map",
     "static/js/2.10399c23.chunk.js.LICENSE.txt": "/wp-content/plugins/murmurations-react-interfaces/widget/build/static/js/2.10399c23.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.772099f3.js",
     "static/css/2.c1e28d34.chunk.css",
     "static/js/2.10399c23.chunk.js",
-    "static/css/main.c22dce49.chunk.css",
-    "static/js/main.0773a0d8.chunk.js"
+    "static/css/main.e34f5c05.chunk.css",
+    "static/js/main.5c5c95c3.chunk.js"
   ]
 }

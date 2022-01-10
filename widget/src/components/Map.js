@@ -6,7 +6,7 @@ import 'leaflet/dist/leaflet.css'
 
 delete L.Icon.Default.prototype._getIconUrl;
 
-const Map = ({nodes, settings}) => {
+const Map = ({nodes, settings, loaded}) => {
 
   L.Icon.Default.mergeOptions({
     iconRetinaUrl: settings.clientPathToApp+'public/images/marker-icon-2x.png',
@@ -14,7 +14,15 @@ const Map = ({nodes, settings}) => {
     shadowUrl: settings.clientPathToApp+'public/images/marker-shadow.png'
   });
 
+  var loadingDiv;
+
+  if(!loaded){
+    loadingDiv = <div class="mri-map-loading"><img src={settings.clientPathToApp + "public/images/spinner.gif"} /></div>
+  }
+
   return (
+    <div class="mri-map-outer-container">
+    {loadingDiv}
     <MapContainer center={settings.mapCenter} zoom={settings.mapZoom} scrollWheelZoom={settings.mapAllowScrollZoom} style={{height: "70vh", width: "100%", margin: "auto"}}>
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -40,6 +48,7 @@ const Map = ({nodes, settings}) => {
           )
       })}
     </MapContainer>
+    </div>
   )
 }
 

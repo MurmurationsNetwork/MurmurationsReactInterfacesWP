@@ -22,7 +22,7 @@ class MurmurationsInterface extends React.Component {
     var api_url = this.props.settings.apiUrl;
     var api_node_format = this.props.settings.apiNodeFormat;
 
-    this.setState({isLoaded : false});
+    this.setState({isLoaded : false, nodes: []});
 
     var params = new URLSearchParams(filters);
 
@@ -104,13 +104,11 @@ class MurmurationsInterface extends React.Component {
 
     if (error) {
       interfaceComponent = <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
-      interfaceComponent = <div>Loading...</div>;
     } else {
       if (this.props.interfaceComp == 'directory' ){
-        interfaceComponent = <Directory nodes={nodes} settings={this.props.settings} />
+        interfaceComponent = <Directory nodes={nodes} settings={this.props.settings} loaded={isLoaded} />
       } else if (this.props.interfaceComp == 'map' ){
-        interfaceComponent = <Map nodes={nodes} settings={this.props.settings} />
+        interfaceComponent = <Map nodes={nodes} settings={this.props.settings} loaded={isLoaded} />
       }
     }
 
