@@ -1,71 +1,59 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate'
 import Node from './Node.js';
 
-class Directory extends React.Component {
+function Directory(props){
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      activePage : 0
-    };
+  const [activePage, setActivePage] = useState(0);
+  const [pageNodes, setPageNodes] = useState(null);
+
+  const nodesPerPage = parseInt(props.settings.nodesPerPage) || 15
+
+  const nodes = props.nodes;
+
+  useEffect(() => {
+    const start = parseInt(activePage)*nodesPerPage;
+    const end = parseInt(start)+ nodesPerPage;
+    setPageNodes(nodes.slice(start,end));
+  }, [activePage, nodes]);
+
+  const handlePageClick = data => {
+    setActivePage(data.selected);
   }
 
-  nodesPerPage = this.props.settings.nodesPerPage || 15
+  var loadingDiv;
 
-  handlePageClick = data => {
-    this.setState({
-      activePage: data.selected,
-      pageNodes: this.getPageNodes()
-    });
+  if(!props.loaded){
+    loadingDiv = <div class="mri-directory-loading"><img src={props.settings.clientPathToApp + "public/images/spinner.gif"} /></div>
   }
 
-  getPageNodes = () => {
-    const start = parseInt(this.state.activePage)*this.nodesPerPage;
-    const end = parseInt(start)+parseInt(this.nodesPerPage);
-    return this.props.nodes.slice(start,end);
-  }
+  return (
 
-  render() {
+    <div>
+    {props.loaded ?
+      <div className="nodeList">
+        <div className="node-count">{nodes.length} results found</div>
+        {pageNodes.map((node) =>  <Node nodeData={node} settings={props.settings}/>)}
+      </div> : loadingDiv }
 
-    const nodes = this.props.nodes;
-
-    const pageNodes = this.getPageNodes();
-
-    var loadingDiv;
-
-    if(!this.props.loaded){
-      loadingDiv = <div class="mri-directory-loading"><img src={this.props.settings.clientPathToApp + "public/images/spinner.gif"} /></div>
-    }
-
-
-    return (
-      <div>
-      {this.props.loaded ?
-        <div className="nodeList">
-          <div className="node-count">{nodes.length} results found</div>
-          {pageNodes.map((node) =>  <Node nodeData={node} settings={this.props.settings}/>)}
-        </div> : loadingDiv }
-        <div className="react-paginate">
-          <ReactPaginate
-            previousLabel={'prev'}
-            nextLabel={'next'}
-            breakLabel={'...'}
-            breakClassName={'break-me'}
-            pageCount={nodes.length/this.nodesPerPage}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={this.nodesPerPage}
-            onPageChange={this.handlePageClick}
-            containerClassName={'pagination'}
-            subContainerClassName={'pages pagination'}
-            pageClassName={'page-link-li'}
-            activeClassName={'active'}
-          />
-        </div>
+     <div className="react-paginate">
+        <ReactPaginate
+          previousLabel={'prev'}
+          nextLabel={'next'}
+          breakLabel={'...'}
+          breakClassName={'break-me'}
+          pageCount={nodes.length/nodesPerPage}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={nodesPerPage}
+          onPageChange={handlePageClick}
+          containerClassName={'pagination'}
+          subContainerClassName={'pages pagination'}
+          pageClassName={'page-link-li'}
+          activeClassName={'active'}
+        />
       </div>
-    );
-
-  }
+    </div>
+  );
 }
 
 export default Directory

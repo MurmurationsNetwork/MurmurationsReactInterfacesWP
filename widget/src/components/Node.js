@@ -1,27 +1,21 @@
 import React from 'react';
 import NodeField from './NodeField.js';
 
-class Node extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-
-  render() {
+function Node(props){
 
     var node_content = [];
 
-    if(this.props.settings.apiNodeFormat == 'HTML'){
-      node_content = <div dangerouslySetInnerHTML={{ __html: this.props.nodeData }} />
-    }else if(this.props.settings.directoryDisplaySchema){
-      for (var field in this.props.settings.directoryDisplaySchema) {
-        if (this.props.settings.directoryDisplaySchema.hasOwnProperty(field)) {
+    if(props.settings.apiNodeFormat == 'HTML'){
+      node_content = <div dangerouslySetInnerHTML={{ __html: props.nodeData }} />
+    }else if(props.settings.directoryDisplaySchema){
+      for (var field in props.settings.directoryDisplaySchema) {
+        if (props.settings.directoryDisplaySchema.hasOwnProperty(field)) {
           node_content.push(
             <NodeField
             field={field}
-            value={this.props.nodeData[field]}
-            attribs = {this.props.settings.directoryDisplaySchema[field]}
-            nodeData = {this.props.nodeData}
+            value={props.nodeData[field]}
+            attribs = {props.settings.directoryDisplaySchema[field]}
+            nodeData = {props.nodeData}
             />
           )
 
@@ -34,7 +28,7 @@ class Node extends React.Component {
       {node_content}
       </div>
     );
-  }
+
 }
 
 export default Node

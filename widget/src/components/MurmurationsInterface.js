@@ -11,6 +11,7 @@ class MurmurationsInterface extends React.Component {
     this.handleFilterSubmit = this.handleFilterSubmit.bind(this);
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.handleErrors = this.handleErrors.bind(this);
     this.state = {
       nodes: [],
       filterFormData : props.settings.formData
@@ -61,6 +62,10 @@ class MurmurationsInterface extends React.Component {
   handleSearchSubmit(event) {
     event.preventDefault();
     this.fetchNodes();
+  }
+
+  handleErrors() {
+    console.log("errors", this)
   }
 
   handleFilterSubmit({formData}, e) {
@@ -118,7 +123,7 @@ class MurmurationsInterface extends React.Component {
             <Form schema={schema}
             formData={this.state.filterFormData}
             onChange={this.handleFilterSubmit}
-            onError={console.log("errors", this)} />
+            onError={this.handleErrors} />
           </div>
           <div className="mri-search-form">
             <form action="/" onSubmit={this.handleSearchSubmit} >
