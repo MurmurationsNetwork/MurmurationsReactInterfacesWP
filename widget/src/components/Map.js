@@ -9,21 +9,21 @@ delete L.Icon.Default.prototype._getIconUrl;
 const Map = ({nodes, settings, loaded}) => {
 
   L.Icon.Default.mergeOptions({
-    iconRetinaUrl: settings.clientPathToApp+'public/images/marker-icon-2x.png',
-    iconUrl: settings.clientPathToApp+'public/images/marker-icon.png',
-    shadowUrl: settings.clientPathToApp+'public/images/marker-shadow.png'
+    iconRetinaUrl: settings.clientPathToApp+'build/images/marker-icon-2x.png',
+    iconUrl: settings.clientPathToApp+'build/images/marker-icon.png',
+    shadowUrl: settings.clientPathToApp+'build/images/marker-shadow.png'
   });
 
   var loadingDiv;
 
   if(!loaded){
-    loadingDiv = <div class="mri-map-loading"><img src={settings.clientPathToApp + "public/images/spinner.gif"} /></div>
+    loadingDiv = <div class="mri-map-loading"><img src={settings.clientPathToApp + "build/images/spinner.gif"} /></div>
   }
 
   return (
     <div class="mri-map">
     {loadingDiv}
-    <MapContainer center={settings.mapCenter} zoom={settings.mapZoom} scrollWheelZoom={settings.mapAllowScrollZoom} style={{height: "70vh", width: "100%", margin: "auto"}}>
+    <MapContainer center={settings.mapCenter} zoom={settings.mapZoom} scrollWheelZoom={settings.mapAllowScrollZoom} >
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

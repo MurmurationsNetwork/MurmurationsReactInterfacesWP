@@ -24,7 +24,7 @@ function Directory(props){
   var loadingDiv;
 
   if(!props.loaded){
-    loadingDiv = <div class="mri-directory-loading"><img src={props.settings.clientPathToApp + "public/images/spinner.gif"} /></div>
+    loadingDiv = <div class="mri-directory-loading"><img src={props.settings.clientPathToApp + "build/images/spinner.gif"} /></div>
   }
 
   return (

@@ -2,7 +2,7 @@
 /* Filter form styles */
 
 .mri-filter-form {
-  border: 0.2rem solid #dcd7ca;
+  border: 1px solid #ccc;
 }
 
 .mri-filter-form button[type=submit]{
@@ -120,6 +120,14 @@
 
 .mri-map {
   position: relative;
+  height: 100%
+}
+
+.mri-map .leaflet-container{
+  position: relative;
+  height: 100%;
+  width: 100%;
+  margin: auto;
 }
 
 #murmurations-react-map .mri-content-container .mri-search-form {
