@@ -38,7 +38,7 @@ class Interfaces {
       $settings['filter_schema']['properties'] = self::generate_filter_schema_fields($settings['filter_fields'],$data_schema);
 
       if( count($settings['filter_fields']) > 0 ){
-        $settings['show_filter'] = true;
+        $settings['show_filters'] = true;
       }
 
     }else{

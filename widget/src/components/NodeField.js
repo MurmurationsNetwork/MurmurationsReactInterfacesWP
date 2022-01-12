@@ -6,7 +6,7 @@ function NodeField(props){
     return null;
   }
 
-  if(this.props.value === Object(props.value) && !Array.isArray(props.value)){
+  if(props.value === Object(props.value) && !Array.isArray(props.value)){
     return null;
   }
 
