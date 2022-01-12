@@ -29,9 +29,9 @@ function Directory(props){
 
   return (
 
-    <div>
+    <div className="mri-directory">
     {props.loaded ?
-      <div className="nodeList">
+      <div className="node-list">
         <div className="node-count">{nodes.length} results found</div>
         {pageNodes.map((node) =>  <Node nodeData={node} settings={props.settings}/>)}
       </div> : loadingDiv }

@@ -21,7 +21,7 @@ const Map = ({nodes, settings, loaded}) => {
   }
 
   return (
-    <div class="mri-map-outer-container">
+    <div class="mri-map">
     {loadingDiv}
     <MapContainer center={settings.mapCenter} zoom={settings.mapZoom} scrollWheelZoom={settings.mapAllowScrollZoom} style={{height: "70vh", width: "100%", margin: "auto"}}>
       <TileLayer

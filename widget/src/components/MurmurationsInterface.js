@@ -102,7 +102,7 @@ function MurmurationsInterface({settings, interfaceComp}){
   }
 
   return (
-    <div>
+    <div className="mri-interface">
       {settings.showFilters ?
       <div className="mri-filter-form">
         <Form schema={schema}
@@ -111,13 +111,15 @@ function MurmurationsInterface({settings, interfaceComp}){
         onError={handleErrors} />
       </div>
       : null }
-      <div className="mri-search-form">
-        <form action="/" onSubmit={handleSearchSubmit} >
-          <input type="text" name="search"  onChange={handleSearchChange} value={search} />
-          <button type="submit">Search</button>
-        </form>
+      <div className="mri-content-container">
+        <div className="mri-search-form">
+          <form action="/" onSubmit={handleSearchSubmit} >
+            <input type="text" name="search"  onChange={handleSearchChange} value={search} />
+            <button type="submit">Search</button>
+          </form>
+        </div>
+        {interfaceComponent}
       </div>
-      {interfaceComponent}
     </div>
   );
 }
