@@ -1,79 +1,78 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import Form from "@rjsf/core";
 import Directory from './Directory.js';
 import Map from './Map.js';
 
-class MurmurationsInterface extends React.Component {
+function MurmurationsInterface({settings, interfaceComp}){
 
-  constructor(props) {
-    super(props);
-    this.fetchNodes = this.fetchNodes.bind(this);
-    this.handleFilterSubmit = this.handleFilterSubmit.bind(this);
-    this.handleSearchSubmit = this.handleSearchSubmit.bind(this);
-    this.handleSearchChange = this.handleSearchChange.bind(this);
-    this.state = {
-      nodes: [],
-      filterFormData : props.settings.formData
-    };
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(false);
+  const [nodes, setNodes] = useState([]);
+  const [search, setSearch] = useState(null);
+  const [filterFormData, setFilterFormData] = useState(settings.formData);
 
-  }
+  useEffect(() => {
+    fetchNodes()
+  }, []);
 
-  fetchNodes(filters){
-    var api_url = this.props.settings.apiUrl;
-    var api_node_format = this.props.settings.apiNodeFormat;
+  const fetchNodes = (filters) => {
+    var api_url = settings.apiUrl;
+    var api_node_format = settings.apiNodeFormat;
 
-    this.setState({isLoaded : false, nodes: []});
+    setIsLoaded(false);
+    setNodes([]);
 
     var params = new URLSearchParams(filters);
 
-    if( this.props.interfaceComp == 'directory' ){
+    if( interfaceComp == 'directory' ){
       params.set('format', api_node_format);
     }
 
-    if(this.state.search){
-      params.set('search', this.state.search);
+    if(search){
+      params.set('search', search);
     }
 
     fetch(api_url+'?'+params.toString())
       .then(res => res.json())
       .then(
         (result) => {
-          this.setState({
-            isLoaded: true,
-            nodes: result
-          });
+          setIsLoaded(true);
+          setNodes(result);
         },
         (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
+          setIsLoaded(true);
+          setError(error);
         }
       )
 
 
   }
 
-  handleSearchChange(event) {
-    this.setState({search : event.target.value});
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value)
   }
 
-  handleSearchSubmit(event) {
+  const handleSearchSubmit = (event) => {
     event.preventDefault();
-    this.fetchNodes();
+    fetchNodes();
   }
 
-  handleFilterSubmit({formData}, e) {
+  const handleErrors = () => {
+    console.log("errors", this)
+  }
+
+  const handleFilterSubmit = ({formData}, e) => {
 
     var filters = "";
 
-    this.setState({filterFormData : formData});
+    setFilterFormData(formData);
+
 
     Object.keys(formData).forEach((key,index) => {
       if(formData[key]){
         if (formData[key] != "any" && formData[key] != ""){
-          if('operator' in this.props.settings.filterSchema.properties[key]){
-            var op = this.props.settings.filterSchema.properties[key].operator;
+          if('operator' in settings.filterSchema.properties[key]){
+            var op = settings.filterSchema.properties[key].operator;
           }else{
             var op = 'equals';
           }
@@ -84,53 +83,43 @@ class MurmurationsInterface extends React.Component {
       }
     });
 
-    this.fetchNodes(filters);
+    fetchNodes(filters);
 
   }
 
-  componentDidMount() {
+  const schema = settings.filterSchema;
 
-    this.fetchNodes();
+  var interfaceComponent;
 
-  }
-
-  render() {
-
-    const schema = this.props.settings.filterSchema;
-
-    const { error, isLoaded, nodes } = this.state;
-
-    var interfaceComponent;
-
-    if (error) {
-      interfaceComponent = <div>Error: {error.message}</div>;
-    } else {
-      if (this.props.interfaceComp == 'directory' ){
-        interfaceComponent = <Directory nodes={nodes} settings={this.props.settings} loaded={isLoaded} />
-      } else if (this.props.interfaceComp == 'map' ){
-        interfaceComponent = <Map nodes={nodes} settings={this.props.settings} loaded={isLoaded} />
-      }
+  if (error) {
+    interfaceComponent = <div>Error: {error.message}</div>;
+  } else {
+    if (interfaceComp == 'directory' ){
+      interfaceComponent = <Directory nodes={nodes} settings={settings} loaded={isLoaded} />
+    } else if (interfaceComp == 'map' ){
+      interfaceComponent = <Map nodes={nodes} settings={settings} loaded={isLoaded} />
     }
-
-      return (
-        <div>
-          <div className="mri-filter-form">
-            <Form schema={schema}
-            formData={this.state.filterFormData}
-            onChange={this.handleFilterSubmit}
-            onError={console.log("errors", this)} />
-          </div>
-          <div className="mri-search-form">
-            <form action="/" onSubmit={this.handleSearchSubmit} >
-              <input type="text" name="search"  onChange={this.handleSearchChange} value={this.state.search} />
-              <button type="submit">Search</button>
-            </form>
-          </div>
-          {interfaceComponent}
-        </div>
-      );
-
   }
+
+  return (
+    <div>
+      {settings.showFilters ?
+      <div className="mri-filter-form">
+        <Form schema={schema}
+        formData={filterFormData}
+        onChange={handleFilterSubmit}
+        onError={handleErrors} />
+      </div>
+      : null }
+      <div className="mri-search-form">
+        <form action="/" onSubmit={handleSearchSubmit} >
+          <input type="text" name="search"  onChange={handleSearchChange} value={search} />
+          <button type="submit">Search</button>
+        </form>
+      </div>
+      {interfaceComponent}
+    </div>
+  );
 }
 
 export default MurmurationsInterface
