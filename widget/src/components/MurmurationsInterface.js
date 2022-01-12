@@ -103,12 +103,14 @@ function MurmurationsInterface({settings, interfaceComp}){
 
   return (
     <div>
+      {settings.showFilters ?
       <div className="mri-filter-form">
         <Form schema={schema}
         formData={filterFormData}
         onChange={handleFilterSubmit}
         onError={handleErrors} />
       </div>
+      : null }
       <div className="mri-search-form">
         <form action="/" onSubmit={handleSearchSubmit} >
           <input type="text" name="search"  onChange={handleSearchChange} value={search} />
