@@ -1,7 +1,11 @@
 {
   "name" : {
     "showLabel" : false,
-    "link" : "gen_project_url"
+    "link" : "url"
+  },
+  "primary_url" : {
+    "showLabel" : false,
+    "link" : "primary_url"
   },
   "url" : {
     "showLabel" : false,
@@ -11,13 +15,9 @@
     "showLabel" : false,
     "truncate" : 250
   },
-  "gen_community_setting" : {
+  "tags" : {
     "showLabel" : true,
-    "label" : "Setting"
-  },
-  "community_types" : {
-    "showLabel" : true,
-    "label" : "Community Types"
+    "label" : "Tags"
   },
   "languages_spoken" : {
     "showLabel" : true,
