@@ -3,7 +3,7 @@ const MapPopup = ({node}) => {
   <div>
     {node.image &&
       <img
-        src={node.image[0].url}
+        src={node.image[0].url || node.image}
         alt="Node logo"
         maxWidth={"50%"}
         height={8}
@@ -11,8 +11,8 @@ const MapPopup = ({node}) => {
     }
     <div>
         {
-          node.url || node.urls ?
-            <a href={node.url || node.urls[0].url}  target="_blank" rel="noopener noreferrer">
+          node.url || node.urls || node.primary_url ?
+            <a href={node.primary_url || node.url || node.urls[0].url}  target="_blank" rel="noopener noreferrer">
               <span wordBreak="break-all">{node.name}</span>
             </a>
               :

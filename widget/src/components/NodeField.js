@@ -19,7 +19,7 @@ function NodeField(props){
   }
 
   var labelElement = '';
-  if(attribs.showLabel == true){
+  if(attribs.showLabel === true){
     var labelValue = attribs.label;
     labelElement = <div className={"node-field-label "+field}>{labelValue}</div>
   }else{
