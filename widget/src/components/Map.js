@@ -44,6 +44,14 @@ const Map = ({nodes, settings, loaded}) => {
           </Marker>):
           null}
 
+            {(node.latitude && node.longitude)?
+            (<Marker position={[parseFloat(node.latitude), parseFloat(node.longitude)]}>
+            <Popup>
+              <MapPopup node={node} />
+            </Popup>
+          </Marker>):
+          null}
+
           </div>
           )
       })}
