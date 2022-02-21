@@ -4,7 +4,10 @@ const MapPopup = ({node}) => {
     {node.image &&
       <img
         src={node.image[0].url || node.image}
-        alt="Node logo"
+        onError={({ currentTarget }) => {
+          currentTarget.style.display = "none"
+        }}
+        alt={node.name+" image"}
         maxWidth={"50%"}
         height={8}
       />
