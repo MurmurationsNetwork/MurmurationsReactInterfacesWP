@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ReactPaginate from 'react-paginate'
 import Node from './Node.js';
 
@@ -11,6 +11,8 @@ function Directory(props){
 
   const nodes = props.nodes;
 
+  const dirRef = useRef();
+
   useEffect(() => {
     const start = parseInt(activePage)*nodesPerPage;
     const end = parseInt(start)+ nodesPerPage;
@@ -19,6 +21,7 @@ function Directory(props){
 
   const handlePageClick = data => {
     setActivePage(data.selected);
+    dirRef.current.scrollIntoView({ behavior: 'smooth' })
   }
 
   var loadingDiv;
@@ -27,9 +30,10 @@ function Directory(props){
     loadingDiv = <div class="mri-directory-loading"><img src={props.settings.clientPathToApp + "build/images/spinner.gif"} /></div>
   }
 
+
   return (
 
-    <div className="mri-directory">
+    <div ref={dirRef} className="mri-directory">
     {props.loaded ?
       <div className="node-list">
         <div className="node-count">{nodes.length} results found</div>
