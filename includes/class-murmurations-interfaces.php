@@ -81,16 +81,19 @@ class Interfaces {
 
   static function generate_filter_schema_fields( $filter_fields, $data_schema ){
     $filter_schema_fields = array();
+
+		$local_values = get_option('murmurations_aggregator_filter_options');
+
     foreach ( $filter_fields as $field ) {
-      if( isset($data_schema['properties'][$field]) ){
-        $schema_field = $data_schema['properties'][$field];
+      if( isset( $data_schema['properties'][$field] ) ){
+        $field_attribs = $data_schema['properties'][$field];
         $filter_schema_fields[$field] = array(
-          "title" => $schema_field['title'],
-          "type" => $schema_field['type'] == "boolean" ? "boolean" : "string",
+          "title" => $field_attribs['title'],
+          "type" => $field_attribs['type'] == "boolean" ? "boolean" : "string",
           "operator" => "includes"
         );
 
-        $enum_data = self::get_field_enums( $schema_field );
+        $enum_data = self::get_field_enums( $field, $field_attribs, $local_values );
 
         if ( $enum_data ){
           $filter_schema_fields[$field]['enum'] = $enum_data[0];
@@ -103,20 +106,38 @@ class Interfaces {
     return $filter_schema_fields;
   }
 
-  static function get_field_enums($field){
-    $enum = false;
-    $enumNames = false;
-    if( isset( $field['enum'] ) ){
-      $enum = $field['enum'];
-      $enumNames = isset( $field['enumNames'] ) ? $field['enumNames'] : false;
-    } else if( $field['type'] === 'array' && $field['items']['enum'] ){
-      $enum = $field['items']['enum'];
-      $enumNames = isset( $field['items']['enumNames'] ) ? $field['items']['enumNames'] : false;
-    }
-    if( $enum ){
-      return array( $enum, $enumNames );
-    }else{
-      return false;
-    }
+  static function get_field_enums( $field, $field_attribs, $local_values ){
+    $enum = array();
+    $enumNames = array();
+		$enum_keys = array();
+		if ( isset( $local_values[ $field ] ) ) {
+
+			$local_values[ $field ] = array_values( $local_values[ $field ] );
+
+			if( isset( $field_attribs['enum'] ) ){
+				foreach ( $field_attribs['enum'] as $key => $value ) {
+					if ( in_array( $value, $local_values[ $field ] ) ) {
+						$enum_keys[] = $key;
+					}
+				}
+
+				foreach ($enum_keys as $key) {
+					$enum[$key] = $field_attribs['enum'][$key];
+					if ( isset( $field_attribs['enumNames'] ) ) {
+						$enumNames[$key] = $field_attribs['enumNames'][$key];
+					}
+				}
+
+			} else {
+				$enum = $local_values[ $field ];
+			}
+
+			// Arrays need to be reindexed, because otherwise json_encode turns them into
+			// objects
+			return array( array_values( $enum ), array_values( $enumNames ) );
+
+		} else {
+			return false;
+		}
   }
 }
